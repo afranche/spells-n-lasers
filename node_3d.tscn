@@ -1,0 +1,72 @@
+[gd_scene load_steps=8 format=3 uid="uid://hhin14wu71a0"]
+
+[ext_resource type="PackedScene" uid="uid://bakbwjjf0jl0h" path="res://assets/mechanics/Player.tscn" id="1_1lklu"]
+[ext_resource type="Script" path="res://scripts/player/Camera.gd" id="2_0cnyg"]
+[ext_resource type="Script" path="res://scripts/player/camera/Anchor.gd" id="2_fqjkq"]
+[ext_resource type="Script" path="res://scripts/global/MouseController.gd" id="4_7qf8s"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_pfjr3"]
+size = Vector2(20, 20)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_3gsb2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gig5k"]
+size = Vector3(0.0712891, 0.0626223, 0.0576172)
+
+[node name="Game Board" type="Node3D"]
+
+[node name="World" type="Node" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World"]
+mesh = SubResource("PlaneMesh_pfjr3")
+skeleton = NodePath("../..")
+
+[node name="SpotLight3D" type="SpotLight3D" parent="World"]
+transform = Transform3D(0.905146, 0, -0.4251, 0, 1, 0, 0.4251, 0, 0.905146, -0.707968, 1.32926, 1.63033)
+light_color = Color(0, 1, 1, 1)
+light_energy = 1.746
+light_indirect_energy = 16.0
+light_volumetric_fog_energy = 10.374
+light_size = 0.255
+shadow_enabled = true
+
+[node name="SpotLight3D2" type="SpotLight3D" parent="World"]
+transform = Transform3D(-0.915985, 0, 0.401213, 0, 1, 0, -0.401213, 0, -0.915985, 1.06429, 1.09547, -1.02775)
+light_color = Color(1, 0, 1, 1)
+light_energy = 1.32
+light_size = 0.285
+light_specular = 12.944
+shadow_enabled = true
+
+[node name="StaticBody3D" type="StaticBody3D" parent="World"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/StaticBody3D"]
+shape = SubResource("WorldBoundaryShape3D_3gsb2")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.774944, 1.38571e-07, -0.63203, 0.527709, 0.550335, 0.647035, 0.347828, -0.834944, 0.426479, -14.1699, 5.991, 5.64857)
+light_color = Color(0.0588235, 0.109804, 0.258824, 1)
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("1_1lklu")]
+
+[node name="FreeLookCameraAnchor" type="CharacterBody3D" parent="."]
+script = ExtResource("2_fqjkq")
+
+[node name="Collision" type="CollisionShape3D" parent="FreeLookCameraAnchor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0350953, 0)
+shape = SubResource("BoxShape3D_gig5k")
+disabled = true
+
+[node name="MainCamera" type="Camera3D" parent="."]
+transform = Transform3D(0.867665, -0.369924, 0.332135, 0.0520044, 0.731949, 0.679372, -0.494422, -0.572195, 0.654324, 4, 4, 4)
+current = true
+fov = 101.696
+near = 0.004
+far = 15.89
+script = ExtResource("2_0cnyg")
+boundary = 20
+distance = 2.8
+
+[node name="MouseController" type="Node" parent="."]
+script = ExtResource("4_7qf8s")
